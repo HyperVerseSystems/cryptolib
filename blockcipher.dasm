@@ -1,0 +1,40 @@
+
+;Mixing function (Encrypt)
+encrypt_mixing:
+SET J, 0
+    encrypt_mixing_loop:
+    MLI [X], -1
+    XOR [X], [Z]
+    ADD [X], [Y]
+    XOR [X], [Y]
+    ADD X, 1
+    ADD Y, 1
+    ADD Z, 1
+    ADD J, 1
+    IFL J, 4
+        SET PC, encrypt_mixing_loop
+
+;Rotate L left 1 word
+SET J, [X]
+SET [X], [X+1]
+SET [X+1], [X+2]
+SET [X+2], [X+3]
+SET [X+3], J
+
+;Rotate K left one word
+SET J, [Z]
+SET [Z], [Z+1]
+SET [Z+1], [Z+2]
+SET [Z+2], [Z+3]
+SET [Z+3], [Z+4]
+SET [Z+4], [Z+5]
+SET [Z+5], [Z+6]
+SET [Z+6], [Z+7]
+SET [Z+7], J
+
+;Swap L and R
+XOR X, Y
+XOR Y, X
+XOR X, Y
+
+SET PC, POP

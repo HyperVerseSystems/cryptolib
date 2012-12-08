@@ -1,0 +1,253 @@
+;Hummingbird Encryption Algorithm
+;A=message
+;B=length of message
+;C=key
+SET A, 0xB00
+SET B, 8
+SET C, 0xB00
+
+encrypt:
+	SET [key1], [C]
+	SET [key2], [1+C]
+	SET [key3], [2+C]
+	SET [key4], [3+C]
+	SET [key5], [4+C]
+	SET [key6], [5+C]
+	SET [key7], [6+C]
+	SET [key8], [7+C]
+	
+	SET I, 1
+	SET J, C
+	
+	STI [C], 0
+	IFL I, 8
+		SUB PC, 3	
+	
+	SET Z, A
+	SET PUSH, B
+	
+	JSR initstate
+	SET I, POP
+	
+	encryptloop:
+	SUB I, 1
+	SET A, [R1]
+	ADD A, [Z]
+	SET B, [key1]
+	SET C, [key2]
+	SET X, [key3]
+	SET Y, [key4]
+	JSR WD16
+	SET [t1], A
+	
+	SET A, [R2]
+	ADD A, [t1]
+	SET B, [key5]
+	XOR B, [R5]
+	SET C, [key6]
+	XOR C, [R6]
+	SET X, [key7]
+	XOR X, [R7]
+	SET Y, [key8]
+	XOR Y, R8
+	JSR WD16
+	SET [t1], A
+	
+	SET A, [R2]
+	ADD A, [t2]
+	SET B, [key1]
+	XOR B, [R5]
+	SET C, [key2]
+	XOR C, [R6]
+	SET X, [key3]
+	XOR X, [R7]
+	SET Y, [key4]
+	XOR Y, R8
+	JSR WD16
+	SET [t1], A
+	
+	SET A, [R4]
+	ADD A, [t3]
+	SET B, [key5]
+	SET C, [key6]
+	SET X, [key7]
+	SET Y, [key8]
+	JSR WD16
+	SET [Z], A
+	ADD [Z], [R1]
+	
+	;update state
+	ADD [R1], [t3]
+	ADD [R2], [t1]
+	ADD [R3], [t2]
+	ADD [R4], [R1]
+	ADD [R4], [t3]
+	ADD [R4], [t1]
+	XOR [R5], [R1]
+	XOR [R6], [R2]
+	XOR [R7], [R3]
+	XOR [R8], [R4]
+	
+	ADD Z, 1
+	IFA I, -1
+		SET PC, encryptloop
+	SUB PC, 1
+	
+
+cryptfunc:
+	SET PUSH, X
+	SET PUSH, Y
+	SET PUSH, Z
+	SET J, SBox
+	ADD J, 16
+	;S(x)
+	;funcloop:
+		SUB J, 4
+		
+		SHR A, 4
+		SET X, Ex
+		SHR X, 12
+		SET Y, X
+		MOD X, 4
+		SHR Y, 2
+		ADD Y, J
+		SET Z, [4+Y]
+		MUL X, 4
+		SHL Z, X
+		SHR Z, 12
+		SET PUSH, Z
+		IFN J, SBox
+			SUB PC, 17
+	SET Z, POP
+	SET A, Z
+	SHL A, 12
+	SET Z, POP
+	SHL Z, 8
+	BOR A, Z
+	SET Z, POP
+	SHL Z, 4
+	BOR A, Z
+	SET Z, POP
+	BOR A, Z
+	
+	; L(x)
+	SET Y, A
+	SET Z, A
+	SHL Y, 6
+	BOR Y, EX
+	SHL Z, 10
+	BOR Z, EX
+	XOR Z, Y
+	XOR A, Z
+	
+	SET Z, POP
+	SET Y, POP
+	SET X, POP
+	SET PC, POP
+
+;f(f(f(f(A^B)^C)^X)^Y)
+:WD16
+	XOR A, B
+	JSR cryptfunc
+	XOR A, C
+	JSR cryptfunc
+	XOR A, X
+	JSR cryptfunc
+	XOR A, Y
+	JSR cryptfunc
+	
+	SET PC, POP
+	
+	
+:initstate
+	SET I, 0
+	initloop:
+		SET A, [R1]
+		ADD A, I
+		SET B, [key1]
+		SET C, [key2]
+		SET X, [key3]
+		SET Y, [key4]
+		JSR WD16
+		SET [t1], A
+		
+		SET A, [R2]
+		ADD A, [t1]
+		SET B, [key5]
+		SET C, [key6]
+		SET X, [key7]
+		SET Y, [key8]
+		JSR WD16
+		SET [t2], A
+		
+		SET A, [R3]
+		ADD A, [t2]
+		SET B, [key1]
+		SET C, [key2]
+		SET X, [key3]
+		SET Y, [key4]
+		JSR WD16
+		SET [t3], A
+		
+		SET A, [R4]
+		ADD A, [t3]
+		SET B, [key5]
+		SET C, [key6]
+		SET X, [key7]
+		SET Y, [key8]
+		JSR WD16
+		SET [t4], A
+		
+		ADD [R1], [t4]
+		SHL [R1], 3
+		BOR [R1], EX
+		
+		ADD [R2], [t1]
+		SHR [R2], 1
+		BOR [R2], EX
+		
+		ADD [R3], [t2]
+		SHL [R3], 8
+		BOR [R3], EX
+		
+		ADD [R4], [t3]
+		SHL [R4], 1
+		BOR [R4], EX
+		
+		XOR [R5], [R1]
+		XOR [R6], [R2]
+		XOR [R7], [R3]
+		XOR [R8], [R4]
+		
+		ADD I, 1
+		IFL I, 5
+			SET PC, initloop
+		
+		SET PC, POP
+	
+
+key1:	DAT 0
+key2:	DAT 0
+key3:	DAT 0
+key4:	DAT 0
+key5:	DAT 0
+key6:	DAT 0
+key7:	DAT 0
+key8:	DAT 0
+
+R1:		DAT 0
+R2:		DAT 0
+R3:		DAT 0
+R4:		DAT 0
+R5:		DAT 0
+R6:		DAT 0
+R7:		DAT 0
+R8:		DAT 0
+
+t1:		DAT 0
+t2:		DAT 0
+t3:		DAT 0
+t4:		DAT 0
+
+SBox:
+DAT 0x7ce9, 0x215f, 0xb6d0, 0x48a3, 0x4a16, 0x8f7c, 0x30ed, 0x59b2, 0x2fc1, 0x56ad, 0xe834, 0x0b97, 0xf458, 0x9721, 0xa30e, 0x6cdb
