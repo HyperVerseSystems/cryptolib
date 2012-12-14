@@ -5,6 +5,76 @@
 ;C = Pointer to message
 ;PUSH = Length of message
 
+;Encrypt Permutation
+EWD16:
+    SET PUSH, I
+    SET PUSH, B
+    
+    SET I, 0
+    EWD16_loop:
+        XOR A, [B]
+        JSR EMix
+        ADD I, 1
+        ADD B, 1
+        IFN I, 4
+            SET PC, EWD16_loop
+    
+    SET B, POP
+    SET I, POP
+    SET PC, POP
+
+;Encrypt Mixing Function
+EMix:
+    SET PUSH, B
+    
+    SET B, SBoxE
+    JSR FuncS
+    SET B, A
+    SHL B, 6
+    BOR B, EX
+    XOR B, A
+    SHL A, 10
+    BOR A, EX
+    XOR A, B
+    
+    SET B, POP
+    SET PC, POP
+
+;Decrypt Permutation
+DWD16:
+    SET PUSH, I
+    
+    SET I, 0
+    ADD B, 3
+    DWD16_loop:
+        JSR DMix
+        XOR A, [B]
+        ADD I, 1
+        SUB B, 1
+        IFN I, 4
+            SET PC, EWD16_loop
+    
+    SET I, POP
+    SET PC, POP
+
+;Decrypt Mixing Function
+DMix:
+    SET PUSH, B
+    
+    SET B, A
+    SHR B, 6
+    BOR B, EX
+    XOR B, A
+    SHR A, 10
+    BOR A, EX
+    XOR A, B
+    
+    SET B, SBoxD
+    JSR FuncS
+    
+    SET B, POP
+    SET PC, POP
+
 ;A = Word to SBox
 ;B = SBox to use
 FuncS:
@@ -45,7 +115,7 @@ FuncS:
     SET C, POP
     SET PC, POP
 
-SBoxC:
+SBoxE:
 DAT 0x7ce9, 0x215f, 0xb6d0, 0x48a3
 DAT 0x4a16, 0x8f7c, 0x30ed, 0x59b2
 DAT 0x2fc1, 0x56ad, 0xe834, 0x0b97
