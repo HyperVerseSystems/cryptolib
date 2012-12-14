@@ -1,3 +1,50 @@
+;Hummingbird-2 Encryption Algorithm
+
+;A = Pointer to key
+;B = Pointer to IV
+;C = Pointer to message
+;PUSH = Length of message
+
+;A = Word to SBox
+;B = SBox to use
+FuncS:
+    SET PUSH, C
+    SET PUSH, I
+    SET PUSH, X
+    SET PUSH, Y
+    SET PUSH, Z
+    
+    SET C, A
+    SET A, 0
+    SET I, 0
+    
+    FuncS_loop:
+    ADD I, 1
+    SHL C, 4
+    SET X, EX
+    SHR X, 2
+    SET Y, EX
+    SHR Y, 14
+    ADD X, B
+    ADD Y, 1
+    MUL Y, 4
+    SET Z, [X]
+    SHL Z, Y
+    SET Z, EX
+    AND Z, 0xf
+    SHL A, 4
+    BOR A, Z
+    ADD B, 4
+    IFL I, 4
+        SET PC, FuncS_loop
+    
+    SET Z, POP
+    SET Y, POP
+    SET X, POP
+    SET I, POP
+    SET C, POP
+    SET PC, POP
+
 SBoxC:
 DAT 0x7ce9, 0x215f, 0xb6d0, 0x48a3
 DAT 0x4a16, 0x8f7c, 0x30ed, 0x59b2
