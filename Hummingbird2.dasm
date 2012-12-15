@@ -5,6 +5,94 @@
 ;C = Pointer to message
 ;PUSH = Length of message
 
+;Initialization
+Init:
+    SET PUSH, J
+    SET PUSH, X
+    SET PUSH, Y
+    SET PUSH, Z
+    SET PUSH, A
+    SET PUSH, I
+    SET C, State
+    
+    SET [C], [B]
+    SET [C+1], [B+1]
+    SET [C+2], [B+2]
+    SET [C+3], [B+3]
+    SET [C+4], [B]
+    SET [C+5], [B+1]
+    SET [C+6], [B+2]
+    SET [C+7], [B+3]
+    
+    SET B, A
+    SET I, 0
+    
+    Init_loop
+    SET A, [C]
+    ADD A, I
+    JSR EWD16
+    SET J, A
+    
+    SET A, [C+1]
+    ADD A, J
+    JSR EWD16
+    SET X, A
+    
+    SET A, [C+2]
+    ADD A, X
+    JSR EWD16
+    SET Y, A
+    
+    SET A, [C+3]
+    ADD A, Y
+    JSR EWD16
+    SET Z, A
+    
+    SET A, [C]
+    ADD A, Z
+    SHL A, 3
+    BOR A, EX
+    SET [C], A
+    ADD C, 1
+    
+    SET A, [C]
+    ADD A, J
+    SHR A, 1
+    BOR A, EX
+    SET [C], A
+    ADD C, 1
+    
+    SET A, [C]
+    ADD A, X
+    SHL A, 8
+    BOR A, EX
+    SET [C], A
+    ADD C, 1
+    
+    SET A, [C]
+    ADD A, Y
+    SHL A, 1
+    BOR A, EX
+    SET [C], A
+    ADD C, 1
+    
+    XOR [C+4], [C]
+    XOR [C+5], [C+1]
+    XOR [C+6], [C+2]
+    XOR [C+7], [C+3]
+    
+    ADD I, 1
+    IFL I, 4
+        SET PC, Init_loop
+    
+    SET I, POP
+    SET A, POP
+    SET Z, POP
+    SET Y, POP
+    SET X, POP
+    SET J, POP
+    SET PC, POP
+
 ;Encrypt Permutation
 EWD16:
     SET PUSH, I
@@ -114,6 +202,10 @@ FuncS:
     SET I, POP
     SET C, POP
     SET PC, POP
+
+State:
+DAT 0x0, 0x0, 0x0, 0x0
+DAT 0x0, 0x0, 0x0, 0x0
 
 SBoxE:
 DAT 0x7ce9, 0x215f, 0xb6d0, 0x48a3
