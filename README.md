@@ -1,4 +1,4 @@
-*DASM Cryptography library
+#DASM Cryptography library
 
 An attempt to create a crypto library optimized for DCPU  
 Currently, Hummingbird2.dasm is the only file being worked on.  
