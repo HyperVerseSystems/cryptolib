@@ -121,7 +121,7 @@ Update_State:
     ADD [J], Z
     ADD [J+1], X
     ADD [J+2], Y
-    ADD [J+3], [J+1]
+    ADD [J+3], [J]
     ADD [J+3], X
     XOR [J+4], [J]
     XOR [J+5], [J+1]
