@@ -117,6 +117,8 @@ Decrypt:
             SET PC, Return
         JSR Update_State
         
+        SET PC, Decrypt_loop
+        
 Update_State:
     ADD [J], Z
     ADD [J+1], X
@@ -264,7 +266,7 @@ DWD16:
         ADD I, 1
         SUB B, 1
         IFN I, 4
-            SET PC, EWD16_loop
+            SET PC, DWD16_loop
     
     SET I, POP
     SET PC, POP
