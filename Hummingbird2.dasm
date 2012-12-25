@@ -16,7 +16,7 @@ Encrypt:
     SET PUSH, I
     JSR Init
     
-    SET I, PICK 1
+    SET I, PICK 6
     Encrypt_loop:
         SET J, State
         
@@ -80,7 +80,7 @@ Decrypt:
     
     JSR Init
     
-    SET I, PICK 1
+    SET I, PICK 6
     
     Decrypt_loop:
         SET J, State
