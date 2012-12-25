@@ -78,7 +78,7 @@ Decrypt:
         SUB A, [J]
         ADD B, 4
         JSR DWD16
-        SUB A, [J+4]
+        SUB A, [J+3]
         SET Z, A
         
         SUB B, 4
@@ -113,6 +113,7 @@ Decrypt:
         SET [C], A
         
         SUB I, 1
+        ADD C, 1
         IFE I, 0
             SET PC, Return
         JSR Update_State
@@ -259,12 +260,12 @@ DWD16:
     SET PUSH, I
     
     SET I, 0
-    ADD B, 3
+    ADD B, 4
     DWD16_loop:
+        SUB B, 1
         JSR DMix
         XOR A, [B]
         ADD I, 1
-        SUB B, 1
         IFN I, 4
             SET PC, DWD16_loop
     
@@ -274,18 +275,28 @@ DWD16:
 ;Decrypt Mixing Function
 DMix:
     SET PUSH, B
+    SET PUSH, C
     
     SET B, A
-    SHR B, 6
+    SET C, A
+    SHL B, 2
     BOR B, EX
     XOR B, A
-    SHR A, 10
+    SHL C, 4
+    BOR C, EX
+    XOR B, C
+    SET C, A
+    SHL C, 12
+    BOR C, EX
+    XOR B, C
+    SHL A, 14
     BOR A, EX
     XOR A, B
     
     SET B, SBoxD
     JSR FuncS
     
+    SET C, POP
     SET B, POP
     SET PC, POP
 
@@ -340,8 +351,9 @@ Return:
     SET [J+7], 0
     SET A, C
     
-    ADD SP, 1
-    SET PC, POP
+    SET C, POP
+    SUB A, POP
+    SET PC, C
 
 State:
 DAT 0x0, 0x0, 0x0, 0x0
