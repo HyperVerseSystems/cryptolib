@@ -30,11 +30,13 @@ Key size is important for many reasons. First, you want a key long enough to
 provide good security against a brute force. Current practice dictates that a 64 bit
 (4 word) key is the absolute minimum, and even that is dangerously close to broken.  
 If we want to look around, then the US NIST standard is AES which uses 128bit to 256 
-bit keys (4-8 words).
+bit keys (4-8 words).  
+```
 AES: 128-256 bit  
 Salsa20: 128 bit  
 Hummingbird: 128 bit  
 CipherSaber: 2048 bit  
+```
 Another consideration is that entropy's implementation of CipherSabre codes on bytes, 
 so that key that would already be 128 words, is now 256. While CipherSabre is more 
 secure against brute force, you also have to remember, or store, 256 bytes of data.
@@ -48,12 +50,15 @@ starts the clock, and interrupt 1 gives me a completion time in ticks. All algor
 are given 0's for the key and the message, and an 8 word message (expanded to 16 words
 as per CipherSabre's usage instructions). The times listed below are an average of 
 10 iterations of encryption and decryption.  
+```
 Hummingbird: 10.9 ticks  
 CipherSabre: 42.3 ticks  
+```
 As shown here, CipherSabre has almost 4 times the run speed of Hummingbird.  
 
 ###Code Size
 Word size of the library compiled with organic (as short literal optimization is cleaner
 and easier in organic)
+```
 Hummingbird: 452  
 CipherSabre: 375
