@@ -18,13 +18,21 @@ SET A, 0
 SET B, 1
 HWI [clock]
 
+test_loop:
+
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;TEST CODE BELOW;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;END TEST CODE;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;
+
+SUB [iterations], 1
+IFN [iterations], 0
+    SET PC, test_loop
 
 SET A, 1
 HWI [clock]
@@ -34,13 +42,15 @@ ADD PC, 0xFFFE
 
 
 clock:  DAT 0
+iterations: DAT 10
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;INCLUDES;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-
+#include ""
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;TEST CODE DATA;;;;
+;;;;;;;;;;;;;;;;;;;;;;;
 

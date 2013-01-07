@@ -46,14 +46,14 @@ secure against brute force, you also have to remember, or store, 256 bytes of da
 As there are no implementations for AES and Salsa20 yet, those will not be included. 
 However, you can assume that the will both be much slower, as they operate on 32 bit 
 words, which will slow down computation.
-My method of timing below was to use the dcpu clock ticking at 60Hz. An interrupt 0 
-starts the clock, and interrupt 1 gives me a completion time in ticks. All algorithms 
+I used the included AvgRunSpeed code to run each algorithm. All algorithms 
 are given 0's for the key and the message, and an 8 word message (expanded to 16 words
-as per CipherSabre's usage instructions). The times listed below are an average of 
-10 iterations of encryption and decryption.  
+as per CipherSabre's usage instructions). Blowfish uses a 128 bit key and is initialized once. 
+The times listed below are an average of 10 iterations of encryption and decryption.  
 ```
-Hummingbird: 10.9 ticks  
-CipherSabre: 42.3 ticks  
+Hummingbird: 9.8 ticks  
+CipherSabre: 65.7 ticks  
+Blowfish   : (unable to run properly)  
 ```
 As shown here, CipherSabre has almost 4 times the run speed of Hummingbird.  
 
