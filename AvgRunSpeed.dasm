@@ -1,0 +1,46 @@
+;Average computation speed
+;Runs the selected functions 10 times, then outputs
+;total run time in ticks. Doesn't do the division, so
+;we don't lose accuracy to rounding
+
+HWN I
+
+:device_loop
+SUB I, 1
+HWQ I
+IFE A, 0xB402
+    SET PC, found
+SET PC, device_loop
+:found
+SET [clock], I
+
+SET A, 0
+SET B, 1
+HWI [clock]
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;;;;TEST CODE BELOW;;;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;END TEST CODE;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+SET A, 1
+HWI [clock]
+
+;Tick elapsed will be stored in C
+ADD PC, 0xFFFE
+
+
+clock:  DAT 0
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;INCLUDES;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;TEST CODE DATA;;;;
+
