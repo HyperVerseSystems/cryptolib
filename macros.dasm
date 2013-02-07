@@ -1,0 +1,13 @@
+;Macros that can be used (or are often used) within the library
+
+;Rotates a word to the right
+.macro ROR(word, rotate)
+SHR word, rotate
+BOR word, EX
+.endmacro
+
+;Rotates a word to the left
+.macro ROL(word, rotate)
+SHL word, rotate
+BOR word, EX
+.endmacro

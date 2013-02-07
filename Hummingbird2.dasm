@@ -1,7 +1,7 @@
 ;Hummingbird-2 Encryption Algorithm
 ;Implementation by HyperVerse Systems
 ;V 1
-
+.include "macros.dasm"
 ;A = Pointer to IV
 ;B = Pointer to key
 ;C = Pointer to message
@@ -183,29 +183,25 @@ Init:
     
     SET A, [C]
     ADD A, Z
-    SHL A, 3
-    BOR A, EX
+    ROL(A, 3)
     SET [C], A
     ADD C, 1
     
     SET A, [C]
     ADD A, J
-    SHR A, 1
-    BOR A, EX
+    ROR(A, 1)
     SET [C], A
     ADD C, 1
     
     SET A, [C]
     ADD A, X
-    SHL A, 8
-    BOR A, EX
+    ROL(A, 8)
     SET [C], A
     ADD C, 1
     
     SET A, [C]
     ADD A, Y
-    SHL A, 1
-    BOR A, EX
+    ROL(A, 1)
     SET [C], A
     SUB C, 3
     
@@ -246,11 +242,9 @@ EMix:
     SET B, SBoxE
     JSR FuncS
     SET B, A
-    SHL B, 6
-    BOR B, EX
+    ROL(B, 6)
     XOR B, A
-    SHL A, 10
-    BOR A, EX
+    ROL(A, 10)
     XOR A, B
     
     SET B, POP
@@ -280,18 +274,14 @@ DMix:
     
     SET B, A
     SET C, A
-    SHL B, 2
-    BOR B, EX
+    ROL(B, 2)
     XOR B, A
-    SHL C, 4
-    BOR C, EX
+    ROL(C, 4)
     XOR B, C
     SET C, A
-    SHL C, 12
-    BOR C, EX
+    ROL(C, 12)
     XOR B, C
-    SHL A, 14
-    BOR A, EX
+    ROL(A, 14)
     XOR A, B
     
     SET B, SBoxD
