@@ -11,3 +11,8 @@ BOR word, EX
 SHL word, rotate
 BOR word, EX
 .endmacro
+
+;Bitwise NOT
+.macro NOT(word)
+XOR word, 0xFFFF
+.endmacro
