@@ -1,15 +1,23 @@
 #DASM Cryptography library
 
 An attempt to create a crypto library optimized for DCPU  
-Currently, Hummingbird2.dasm is the only file being worked on.  
-AES and SALSA will come up next for those that want more security.  
-Finally, I will work on a block cipher optimized for the DCPU.  
+Currently, Hummingbird2.dasm is working, and can be used, and more functions are 
+forthcoming. I am still actively working on all of this.  
+
+##Todo List
+* Add message authentication to hummingbird
+* Finish up implementation of RG16 hash function
+* Tie everything together in an actual library
+
+If there is anything you would like to see added please let me know.
+I plan on keeping code size down, but size can make way for good functional 
+additions.
 
 ##Usage
 
 ###Hummingbird
-A is the pointer to the Initialization Vector  
-B is the pointer to the Key  
+A is the pointer to the 4 word Initialization Vector  
+B is the pointer to the 8 word Key  
 C is the pointer to the message  
 and the length of the message is pushed to the stack  
 You then JSR Encrypt to encrypt, and Decrypt to decrypt
