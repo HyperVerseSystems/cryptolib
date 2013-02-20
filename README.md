@@ -63,13 +63,15 @@ Hummingbird: 9.8 ticks
 CipherSabre: 65.7 ticks  
 Blowfish   : (unable to run properly)  
 ```
+Hummingbird-fast is about 3x faster at the moment.
 As shown here, CipherSabre has almost 4 times the run speed of Hummingbird.  
 
 ###Code Size
 Word size of the library compiled with organic (as short literal optimization is cleaner
 and easier in organic)
 ```
-Hummingbird: 452  
+Hummingbird: 452
+Hummingbird-fast:  918
 Blowfish:   2346
 CipherSabre: 375
 ```
