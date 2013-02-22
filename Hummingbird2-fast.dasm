@@ -270,24 +270,20 @@ DWD16:
 ;Decrypt Mixing Function
 DMix:
     SET PUSH, B
-    SET PUSH, C
     
     SET B, A
-    SET C, A
     ROL(B, 2)
-    XOR B, A
-    ROL(C, 4)
-    XOR B, C
-    SET C, A
-    ROL(C, 12)
-    XOR B, C
-    ROL(A, 14)
+    XOR A, B
+    ROL(B, 2)
+    XOR A, B
+    ROL(B, 8)
+    XOR A, B
+    ROL(B, 2)
     XOR A, B
     
     SET B, SBoxD
     JSR FuncS
     
-    SET C, POP
     SET B, POP
     SET PC, POP
 

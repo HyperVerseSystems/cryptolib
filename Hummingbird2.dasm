@@ -273,15 +273,13 @@ DMix:
     SET PUSH, C
     
     SET B, A
-    SET C, A
     ROL(B, 2)
-    XOR B, A
-    ROL(C, 4)
-    XOR B, C
-    SET C, A
-    ROL(C, 12)
-    XOR B, C
-    ROL(A, 14)
+    XOR A, B
+    ROL(B, 2)
+    XOR A, B
+    ROL(B, 8)
+    XOR A, B
+    ROL(B, 2)
     XOR A, B
     
     SET B, SBoxD
@@ -297,35 +295,22 @@ FuncS:
     SET PUSH, C
     SET PUSH, I
     SET PUSH, X
-    SET PUSH, Y
-    SET PUSH, Z
     
     SET C, A
     SET A, 0
-    SET I, 0
-    
+    SET I, 0xF000
+
     FuncS_loop:
-    ADD I, 1
     SHL C, 4
     SET X, EX
-    SHR X, 2
-    SET Y, EX
-    SHR Y, 14
     ADD X, B
-    ADD Y, 1
-    MUL Y, 4
-    SET Z, [X]
-    SHL Z, Y
-    SET Z, EX
-    AND Z, 0xf
-    SHL A, 4
-    BOR A, Z
-    ADD B, 4
-    IFL I, 4
+    SET X, [X]
+    AND X, I
+    BOR A, X
+    SHR I, 4
+    IFG I, 0
         SET PC, FuncS_loop
     
-    SET Z, POP
-    SET Y, POP
     SET X, POP
     SET I, POP
     SET C, POP
@@ -356,13 +341,13 @@ State:
 .dat 0x0, 0x0, 0x0, 0x0
 
 SBoxE:
-.dat 0x7ce9, 0x215f, 0xb6d0, 0x48a3
-.dat 0x4a16, 0x8f7c, 0x30ed, 0x59b2
-.dat 0x2fc1, 0x56ad, 0xe834, 0x0b97
-.dat 0xf458, 0x9721, 0xa30e, 0x6cdb
+.dat 0x742f, 0xcaf4, 0xe1c5, 0x9618
+.dat 0x2859, 0x1f67, 0x57a2, 0xfcd1
+.dat 0xb3ea, 0x6083, 0xde30, 0x0d4e
+.dat 0x4506, 0x89bc, 0xab9d, 0x327b
 
 SBoxD:
-.dat 0xb54f, 0xc690, 0xd3e8, 0x1a27
-.dat 0x92f8, 0x0c36, 0x4d1e, 0x7ba5
-.dat 0xc30a, 0xb45f, 0x9e6d, 0x2781
-.dat 0xa769, 0x12c5, 0x348f, 0xdeb0
+.dat 0xb9ca, 0x5237, 0x4f06, 0xf8a9
+.dat 0xc0b1, 0x6c42, 0x935c, 0x06f5
+.dat 0xd493, 0x3de4, 0xe168, 0x8edf
+.dat 0x172d, 0xab7e, 0x2a8b, 0x7510
